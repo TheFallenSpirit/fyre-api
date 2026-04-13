@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import testimonials from './routes/testimonials.js';
 import billing from './routes/billing.js';
 import { connect } from 'mongoose';
+import health from './routes/health.js';
 
 await connect(process.env.MONGO_URL ?? '', { dbName: 'bot' })
 .then(() => console.log('Successfully connected to MongoDB.'))
@@ -10,6 +11,7 @@ await connect(process.env.MONGO_URL ?? '', { dbName: 'bot' })
 
 const app = new Hono();
 
+app.get('/health', health)
 app.get('/testimonials', testimonials);
 app.post('/billing', billing);
 
