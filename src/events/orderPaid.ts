@@ -1,15 +1,12 @@
 import { Order } from '@polar-sh/sdk/models/components/order.js';
-import { defaultColor, discord, docsUrl, productKeys, redis, sendDM } from '../common.js';
+import { defaultColor, discord, docsUrl, redis, sendDM } from '../common.js';
 import { s } from '@fallencodes/seyfert-utils';
 import { createContainer, createSeparator, createTextDisplay } from '@fallencodes/seyfert-utils/components/message';
 import Guild from '../models/Guild.js';
 import User from '../models/User.js';
 import { MessageFlags } from 'seyfert/lib/types/index.js';
 
-export default async (order: Order) => {
-	const productKey = productKeys[order.productId!];
-    if (!productKey) return;
-
+export default async (order: Order, productKey: string) => {
 	switch (productKey) {
 		case 'user-license': await activateUserLicense(order); break;
 		case 'guild-license': await activateGuildLicense(order); break;
@@ -21,15 +18,8 @@ const orderDisclaimer = createTextDisplay(
 );
 
 async function activateGuildLicense(order: Order) {
-    const guildId = String(order.metadata.activeGuildId);
-	console.log(guildId);
-
-	await Guild.findOneAndUpdate(
-		{ guildId },
-		{ $set: { active: true } },
-		{ upsert: true, returnDocument: 'after' }
-	);
-
+    const guildId = order.metadata.activeGuildId!.toString();
+	await Guild.updateOne({ guildId }, { $set: { active: true } }, { upsert: true });
 	await redis.del(`fs_guild:${guildId}`);
 	const guild = await discord.guilds(guildId).get();
 
@@ -55,14 +45,8 @@ async function activateGuildLicense(order: Order) {
 };
 
 async function activateUserLicense(order: Order) {
-    const activeUserId = String(order.metadata.activeUserId);
-
-	await User.findOneAndUpdate(
-		{ userId: activeUserId },
-		{ $set: { active: true } },
-		{ upsert: true, returnDocument: 'after' }
-	);
-
+    const activeUserId = order.metadata.activeUserId!.toString();
+	await User.updateOne({ userId: activeUserId }, { $set: { active: true } }, { upsert: true });
 	await redis.del(`fs_user:${activeUserId}`);
     const purchaserId = order.customer.externalId!;
 

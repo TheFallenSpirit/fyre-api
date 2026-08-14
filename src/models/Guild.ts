@@ -7,12 +7,14 @@ export interface GuildI {
     _id: string;
     active: boolean;
     guildId: string;
+	featureFlags?: string[];
 }
 
 const guildSchema = new Schema<GuildI>({
     _id: { required: true, type: String, default: () => randomId(16) },
     active: { required: true, type: Boolean, default: false },
-    guildId: { required: true, type: String }
+    guildId: { required: true, type: String },
+	featureFlags: { required: false, type: [String] }
 }, { _id: false, versionKey: false, timestamps: true });
 
 export default model('guilds', guildSchema);
