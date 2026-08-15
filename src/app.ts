@@ -6,8 +6,8 @@ import { connect } from 'mongoose';
 import health from './routes/health.js';
 
 await connect(process.env.MONGO_URL ?? '', { dbName: 'bot' })
-.then(() => console.log('Successfully connected to MongoDB.'))
-.catch(() => console.error('Failed to connect to MongoDB!'));
+	.then(() => console.log('Successfully connected to MongoDB.'))
+	.catch(() => console.error('Failed to connect to MongoDB!'));
 
 const app = new Hono();
 

@@ -14,23 +14,23 @@ export default async (order: Order, productKey: string) => {
 };
 
 const orderDisclaimer = createTextDisplay(
-	`-# Keep your Order ID safe, it's the only way to recover or transfer this license.`
+	'-# Keep your Order ID safe, it\'s the only way to recover or transfer this license.'
 );
 
 async function activateGuildLicense(order: Order) {
-    const guildId = order.metadata.activeGuildId!.toString();
+	const guildId = order.metadata.activeGuildId!.toString();
 	await Guild.updateOne({ guildId }, { $set: { active: true } }, { upsert: true });
 	await redis.del(`fs_guild:${guildId}`);
 	const guild = await discord.guilds(guildId).get();
 
-    const lines = [
-        `### :tada: | Server License Activated\n`,
-        `Thank you for purchasing a Fyre Server License!\n`,
-        `Your server now has access to all of Fyre's features. `,
+	const lines = [
+		'### :tada: | Server License Activated\n',
+		'Thank you for purchasing a Fyre Server License!\n',
+		'Your server now has access to all of Fyre\'s features. ',
 		`To get started or learn more, visit the ${docsUrl}.\n\n`,
 		`**Server**: ||${s(guild.name)} [\`${guild.id}\`]||\n`,
-        `**Order ID**: ||\`${order.id}\`||`
-    ];
+		`**Order ID**: ||\`${order.id}\`||`
+	];
 
 	const container = createContainer([
 		createTextDisplay(lines.join('')),
@@ -45,22 +45,22 @@ async function activateGuildLicense(order: Order) {
 };
 
 async function activateUserLicense(order: Order) {
-    const activeUserId = order.metadata.activeUserId!.toString();
+	const activeUserId = order.metadata.activeUserId!.toString();
 	await User.updateOne({ userId: activeUserId }, { $set: { active: true } }, { upsert: true });
 	await redis.del(`fs_user:${activeUserId}`);
-    const purchaserId = order.customer.externalId!;
+	const purchaserId = order.customer.externalId!;
 
 	const activeUser = await discord.users(activeUserId).get();
 	const activeUserName = s(`${activeUser.global_name ?? activeUser.username} (@${activeUser.username})`);
 
 	if (activeUserId !== purchaserId) {
-        const subscriber = await discord.users(purchaserId).get();
+		const subscriber = await discord.users(purchaserId).get();
 		const subscriberName = s(`${subscriber.global_name ?? subscriber.username} (@${subscriber.username})`);
 
 		const lines = [
-			`### :tada: | User License Gifted\n`,
+			'### :tada: | User License Gifted\n',
 			`${subscriberName} has gifted you a Fyre User License!\n`,
-			`You now have access to all of Fyre's user features. `,
+			'You now have access to all of Fyre\'s user features. ',
 			`To get started or learn more, visit the ${docsUrl}.`
 		];
 
@@ -75,19 +75,19 @@ async function activateUserLicense(order: Order) {
 		});
 	};
 
-    const lines = [
-        `### :tada: | User License Activated\n`,
+	const lines = [
+		'### :tada: | User License Activated\n',
 		'Thank you for purchasing a Fyre User License!',
-    ];
+	];
 
 	if (activeUserId === purchaserId) lines.push(
-		`\nYou now have access to all of Fyre's user features. `,
+		'\nYou now have access to all of Fyre\'s user features. ',
 		`To get started or learn more, visit the ${docsUrl}.`
 	);
 
 	lines.push(
 		`\n\n**User**: ||${activeUserName}||`,
-        `\n**Order ID**: ||\`${order.id}\`||`
+		`\n**Order ID**: ||\`${order.id}\`||`
 	);
 
 	const container = createContainer([
@@ -96,7 +96,7 @@ async function activateUserLicense(order: Order) {
 		orderDisclaimer
 	], { color: defaultColor });
 
-    await sendDM(purchaserId, {
+	await sendDM(purchaserId, {
 		flags: MessageFlags.IsComponentsV2,
 		components: [container.toJSON()]
 	});

@@ -14,9 +14,9 @@ export default async (subscription: Subscription, productKey: string) => {
 	const guild = await discord.guilds(guildId).get();
 
 	const lines = [
-		`### 🎉 | Custom App Proxy Subscription Activated\n`,
-		`Thank you for purchasing or renewing your Custom App Proxy Subscription!\n\n`,
-		`Visit the [Proxy Guide](<https://fyre.bot/docs/guides/proxy>) on the `,
+		'### 🎉 | Custom App Proxy Subscription Activated\n',
+		'Thank you for purchasing or renewing your Custom App Proxy Subscription!\n\n',
+		'Visit the [Proxy Guide](<https://fyre.bot/docs/guides/proxy>) on the ',
 		'Fyre Docs to setup your Custom App Proxy.\n\n',
 		`**Server**: ||${s(guild.name)} [\`${guild.id}\`]||\n`,
 		`**Subscription ID**: ||\`${subscription.id}\`||\n\n`,
@@ -26,7 +26,7 @@ export default async (subscription: Subscription, productKey: string) => {
 	const container = createContainer([
 		createTextDisplay(lines.join('')),
 		createSeparator(),
-		createTextDisplay(`-# Keep your Subscription ID safe, it's the only way to recieve support with this subscription.`)
+		createTextDisplay('-# Keep your Subscription ID safe, it\'s the only way to receive support with this subscription.')
 	], { color: defaultColor });
 
 	await sendDM(subscription.customer.externalId!, {

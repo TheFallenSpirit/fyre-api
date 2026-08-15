@@ -13,21 +13,21 @@ export default async (context: Context<BlankEnv, '/billing', BlankInput>) => {
 
 	try {
 		event = validateEvent(
-            await context.req.text(),
-            context.req.header(),
-            process.env.POLAR_WEBHOOK_SECRET ?? ''
-        );
+			await context.req.text(),
+			context.req.header(),
+			process.env.POLAR_WEBHOOK_SECRET ?? ''
+		);
 	} catch (error) {
 		console.error(error);
 		return context.json({
 			error: true,
-			messages: [`The provided event body and signature are invalid.`]
+			messages: ['The provided event body and signature are invalid.']
 		}, 400);
 	};
 
 	if (!event) return context.json({
 		error: true,
-		messages: [`The provided event body and signature are invalid.`]
+		messages: ['The provided event body and signature are invalid.']
 	}, 400);
 
 	let productKey: string | undefined;
@@ -38,12 +38,12 @@ export default async (context: Context<BlankEnv, '/billing', BlankInput>) => {
 	if (!productKey) return context.json({ error: true, messages: ['Unknown product.'] });
 
 	switch (event.type) {
-        case 'order.paid': orderPaid(event.data, productKey); break;
+		case 'order.paid': orderPaid(event.data, productKey); break;
 		case 'subscription.active': subscriptionActive(event.data, productKey); break;
 		case 'subscription.revoked': subscriptionRevoked(event.data, productKey); break;
 		case 'subscription.canceled': subscriptionCancelled(event.data, productKey); break;
 		case 'subscription.uncanceled': subscriptionUnCancelled(event.data, productKey); break;
-    };
+	};
 
-    return context.json({ error: false, data: null });
+	return context.json({ error: false, data: null });
 };

@@ -11,8 +11,8 @@ export default async (subscription: Subscription, productKey: string) => {
 	const guild = await discord.guilds(guildId).get();
 
 	const lines = [
-		`### 🚫 | Custom App Proxy Subscription Cancelled\n`,
-		`Your Custom App Proxy subscription has been cancelled and will expire at the end of this billing period.\n\n`,
+		'### 🚫 | Custom App Proxy Subscription Cancelled\n',
+		'Your Custom App Proxy subscription has been cancelled and will expire at the end of this billing period.\n\n',
 		`**Server**: ||${s(guild.name)} [\`${guild.id}\`]||\n`,
 		`**Subscription ID**: ||\`${subscription.id}\`||`
 	];

@@ -1,16 +1,17 @@
 {
 	"name": "api.fyre.bot",
 	"type": "module",
-	"version": "1.0.0",
 	"main": "src/app.ts",
+	"author": "Liam L <TheFallenSpirit>",
+	"version": "1.0.0",
+	"license": "AGPL-3.0",
+	"packageManager": "pnpm@10.29.3",
 	"scripts": {
 		"dev": "pnpm run build && pnpm run start --dev",
+		"lint": "eslint .",
 		"build": "rm -r ./build/; tsc",
 		"start": "node -r dotenv/config build/app.js"
 	},
-	"author": "Liam L <TheFallenSpirit>",
-	"license": "AGPL-3.0",
-	"packageManager": "pnpm@10.29.3",
 	"prettier": {
 		"semi": true,
 		"tabWidth": 4,
@@ -31,7 +32,12 @@
 		"valibot": "^1.3.1"
 	},
 	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"@eslint/json": "^2.0.1",
+		"@stylistic/eslint-plugin": "^5.10.0",
 		"@types/node": "^25.6.0",
-		"typescript": "^6.0.2"
+		"eslint": "^10.8.1",
+		"typescript": "^6.0.2",
+		"typescript-eslint": "^8.67.0"
 	}
 }
